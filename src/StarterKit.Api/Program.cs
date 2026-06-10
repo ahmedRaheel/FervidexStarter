@@ -6,14 +6,13 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OpenTelemetry.Metrics;
-using OpenTelemetry.Resources;
-using OpenTelemetry.Trace;
 using Serilog;
 using StarterKit.Api.BuildingBlocks.Application.Behaviors;
 using StarterKit.Api.BuildingBlocks.Caching.Redis;
 using StarterKit.Api.BuildingBlocks.Domain.Interfaces;
 using StarterKit.Api.BuildingBlocks.Infrastructure.Persistence.Context;
+using StarterKit.Api.BuildingBlocks.Infrastructure.Persistence.Seed;
+using StarterKit.Api.Middleware.Observability;
 using StarterKit.Api.BuildingBlocks.Logging.Serilog;
 using StarterKit.Api.Shared.Exceptions.Middleware;
 
@@ -69,12 +68,14 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 builder.Services.AddHttpClient("resilient");
-builder.Services.AddHealthChecks();
-builder.Services.AddOpenTelemetry().ConfigureResource(r => r.AddService("FStarter.Api"))
-    .WithTracing(t => t.AddAspNetCoreInstrumentation().AddHttpClientInstrumentation())
-    .WithMetrics(m => m.AddAspNetCoreInstrumentation().AddHttpClientInstrumentation());
+builder.Services.AddStarterKitObservability(builder.Configuration);
 
 var app = builder.Build();
+
+if (builder.Configuration.GetValue("SeedData:Enabled", true))
+{
+    await ApplicationDbSeeder.SeedAsync(app.Services);
+}
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseSerilogRequestLogging();
@@ -84,7 +85,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
 app.UseOutputCache();
-app.MapHealthChecks("/health");
+app.MapStarterKitHealthChecks();
 app.MapApiEndpoints();
 
 
