@@ -13,11 +13,10 @@ using Serilog;
 using StarterKit.Api.BuildingBlocks.Application.Behaviors;
 using StarterKit.Api.BuildingBlocks.Caching.Redis;
 using StarterKit.Api.BuildingBlocks.Domain.Interfaces;
+using StarterKit.Api.BuildingBlocks.Infrastructure.Persistence.Context;
 using StarterKit.Api.BuildingBlocks.Logging.Serilog;
-using StarterKit.Api.Infrastructure.Persistence.Context;
-using StarterKit.Api.Infrastructure.Persistence.Seed;
 using StarterKit.Api.Shared.Exceptions.Middleware;
-using StarterKit.Api.Shared.Middleware;
+
 using StarterKit.Api.StarterKit.Api.Extensions;
 using System.Text;
 using System.Threading.RateLimiting;
@@ -37,12 +36,12 @@ builder.Services.AddApiVersioning(options =>
 
 var provider = builder.Configuration.GetValue("Database:Provider", "SqlServer");
 var connectionString = builder.Configuration.GetConnectionString(provider) ?? builder.Configuration.GetConnectionString("DefaultConnection")!;
-builder.Services.AddDbContext<AppDbContext>(options =>
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     if (provider.Equals("PostgreSQL", StringComparison.OrdinalIgnoreCase)) options.UseNpgsql(connectionString);
     else options.UseSqlServer(connectionString);
 });
-builder.Services.AddScoped<IDbConnectionFactory>(_ => new DbConnectionFactory(provider, connectionString));
+builder.Services.AddScoped<IDbConnectionFactory>(_ => new SqlConnectionFactory(builder.Configuration));
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
@@ -77,7 +76,6 @@ builder.Services.AddOpenTelemetry().ConfigureResource(r => r.AddService("FStarte
 
 var app = builder.Build();
 
-app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseSerilogRequestLogging();
 app.UseSwaggerDocumentation();
@@ -89,12 +87,7 @@ app.UseOutputCache();
 app.MapHealthChecks("/health");
 app.MapApiEndpoints();
 
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    await db.Database.MigrateAsync();
-    await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
-}
+
 
 app.Run();
 

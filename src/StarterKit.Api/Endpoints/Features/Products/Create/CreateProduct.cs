@@ -2,7 +2,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using StarterKit.Api.BuildingBlocks.Domain.Entities;
-using StarterKit.Api.Infrastructure.Persistence.Context;
+using StarterKit.Api.BuildingBlocks.Infrastructure.Persistence.Context;
 
 namespace StarterKit.Api.Features.Products.Create;
 public sealed record CreateProductRequest(string Name,decimal Price,string Sku);
@@ -17,7 +17,7 @@ public sealed class CreateProductValidator:AbstractValidator<CreateProductComman
         RuleFor(x=>x.Sku).NotEmpty().MaximumLength(64);
     }
 }
-public sealed class CreateProductHandler(AppDbContext db): IRequestHandler<CreateProductCommand,ProductResponse>
+public sealed class CreateProductHandler(ApplicationDbContext db): IRequestHandler<CreateProductCommand,ProductResponse>
 {
     public async Task<ProductResponse> Handle(CreateProductCommand createProductCommand,CancellationToken cancellationToken )
     {

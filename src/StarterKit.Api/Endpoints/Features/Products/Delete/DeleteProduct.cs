@@ -1,11 +1,8 @@
-using MediatR; 
-using Microsoft.AspNetCore.Authorization; 
-using Microsoft.EntityFrameworkCore;
-using StarterKit.Api.Infrastructure.Persistence.Context;
+using StarterKit.Api.BuildingBlocks.Infrastructure.Persistence.Context;
 
 namespace StarterKit.Api.Features.Products.Delete;
 public sealed record DeleteProductCommand(Guid Id):IRequest;
-public sealed class DeleteProductHandler(AppDbContext db):IRequestHandler<DeleteProductCommand>
+public sealed class DeleteProductHandler(ApplicationDbContext db):IRequestHandler<DeleteProductCommand>
 {
     public async Task Handle(DeleteProductCommand  deleteProductCommand,CancellationToken cancellationToken)
     {

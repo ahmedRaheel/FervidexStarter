@@ -2,7 +2,8 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
-using StarterKit.Api.Infrastructure.Persistence.Context;
+using StarterKit.Api.BuildingBlocks.Infrastructure.Persistence.Context;
+
 
 namespace StarterKit.Api.Features.Products.Update;
 public sealed record UpdateProductRequest(string Name,decimal Price,string Sku);
@@ -15,7 +16,7 @@ public sealed class UpdateProductValidator:AbstractValidator<UpdateProductComman
         RuleFor(x=>x.Price).GreaterThan(0);
     }
 }
-public sealed class UpdateProductHandler(AppDbContext db):IRequestHandler<UpdateProductCommand>
+public sealed class UpdateProductHandler(ApplicationDbContext db):IRequestHandler<UpdateProductCommand>
 { public async Task Handle(UpdateProductCommand  updateProductCommand,CancellationToken cancellationToken)
     {
         var p=await db.Products.SingleOrDefaultAsync(x=>x.Id==updateProductCommand.Id, cancellationToken) ?? throw new KeyNotFoundException("Product not found");

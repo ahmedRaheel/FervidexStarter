@@ -57,4 +57,8 @@
     <Compile Update="..\Shared\Exceptions\Middleware\GlobalExceptionMiddleware.cs" Link="Middleware\GlobalExceptionMiddleware.cs" />
     <Compile Update="..\Shared\Middleware\CorrelationIdMiddleware.cs" Link="Middleware\CorrelationIdMiddleware.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BuildingBlocks\Infrastructure\External\" />
+  </ItemGroup>
 </Project>
