@@ -21,7 +21,7 @@ public sealed class CreateProductHandler(AppDbContext db): IRequestHandler<Creat
 {
     public async Task<ProductResponse> Handle(CreateProductCommand createProductCommand,CancellationToken cancellationToken )
     {
-        var p=new Product(createProductCommand.Name,
+        var p = new Product(createProductCommand.Name,
                            createProductCommand.Price,
                            createProductCommand.Sku);
         db.Products.Add(p); 

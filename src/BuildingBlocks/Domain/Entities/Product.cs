@@ -1,6 +1,6 @@
 using StarterKit.Api.BuildingBlocks.Domain.Base;
 namespace StarterKit.Api.BuildingBlocks.Domain.Entities;
-public sealed class Product : AuditableEntity
+public sealed class Product : AuditableEntity<Guid>
 {
     private Product() { }
     public Product(string name, decimal price, string sku)

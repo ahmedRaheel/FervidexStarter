@@ -12,6 +12,7 @@ using OpenTelemetry.Trace;
 using Serilog;
 using StarterKit.Api.BuildingBlocks.Application.Behaviors;
 using StarterKit.Api.BuildingBlocks.Caching.Redis;
+using StarterKit.Api.BuildingBlocks.Domain.Interfaces;
 using StarterKit.Api.BuildingBlocks.Logging.Serilog;
 using StarterKit.Api.Infrastructure.Persistence.Context;
 using StarterKit.Api.Infrastructure.Persistence.Seed;

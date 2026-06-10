@@ -20,6 +20,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="..\BuildingBlocks\Domain\Base\Auditable.cs" />
+    <Compile Remove="..\BuildingBlocks\Domain\Base\AuditableEntity.cs" />
+    <Compile Remove="..\BuildingBlocks\Domain\Entities\Customer.cs" />
+    <Compile Remove="..\BuildingBlocks\Domain\Entities\Order.cs" />
+    <Compile Remove="..\Infrastructure\Persistence\Configurations\CustomerOrderConfiguration.cs" />
     <Compile Remove="..\Infrastructure\Persistence\Configurations\IdentityConfiguration.cs" />
   </ItemGroup>
 

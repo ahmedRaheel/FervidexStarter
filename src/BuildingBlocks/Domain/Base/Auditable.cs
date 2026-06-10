@@ -1,28 +1,7 @@
-using StarterKit.Api.BuildingBlocks.Domain.Interfaces;
 using StarterKit.Api.BuildingBlocks.Domain.Base;
+using StarterKit.Api.BuildingBlocks.Domain.Interfaces;
 
-namespace StarterKit.Api.BuildingBlocks.Domain.Base;
-/// <summary>
-///  Represents the base class for all entities in the domain. 
-///  It provides common properties such as Id, CreatedAtUtc, and UpdatedAtUtc.
-/// </summary>
-public abstract class BaseEntity
-{
-    public Guid Id { get; protected set; } = Guid.NewGuid();
-    public DateTime CreatedAtUtc { get; protected set; } = DateTime.UtcNow;
-    public DateTime? UpdatedAtUtc { get; protected set; }
-    public void MarkUpdated() => UpdatedAtUtc = DateTime.UtcNow;
-}
-
- 
-public abstract class Entity<TId> : BaseEntity
-{
-    public new TId Id { get; protected set; }
-}
-
-
-
-
+namespace BuildingBlocks.Domain.Base;
 
 /// <summary>
 /// Tracks creation and modification of objects.

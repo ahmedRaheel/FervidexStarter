@@ -9,8 +9,9 @@ public sealed class DeleteProductHandler(AppDbContext db):IRequestHandler<Delete
 {
     public async Task Handle(DeleteProductCommand  deleteProductCommand,CancellationToken cancellationToken)
     {
-        var product = await db.Products.SingleOrDefaultAsync(x => x.Id == deleteProductCommand.Id, cancellationToken) ?? throw new KeyNotFoundException("Product not found");
-        product.Delete();
+        var product = await db.Products.SingleOrDefaultAsync(x => x.Id == deleteProductCommand.Id, cancellationToken) 
+                         ?? throw new KeyNotFoundException("Product not found");
+        db.Products.Remove(product);
         await db.SaveChangesAsync(cancellationToken);
     }
 }
