@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: { name: forgestarter-ingress }
+spec:
+  rules:
+  - host: api.forgestarter.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: forgestarter-api
+            port: { number: 80 }

@@ -1,0 +1,4 @@
+services:
+  api:
+    environment:
+      Serilog__MinimumLevel__Default: Debug

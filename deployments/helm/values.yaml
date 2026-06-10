@@ -1,0 +1,6 @@
+replicaCount: 2
+image:
+  repository: forgestarter-api
+  tag: latest
+service:
+  port: 80
