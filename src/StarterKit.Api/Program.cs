@@ -52,7 +52,7 @@ builder.Services.AddHttpContextAccessor();
 
 
 builder.Services.AddAuthorization();
-
+builder.Services.AddAuthentication();
 
 
 builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
@@ -69,7 +69,17 @@ builder.Services.AddRateLimiter(options =>
 });
 builder.Services.AddHttpClient("resilient");
 builder.Services.AddStarterKitObservability(builder.Configuration);
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration =
+        builder.Configuration.GetConnectionString("Redis")
+        ?? builder.Configuration["Redis:ConnectionString"]
+        ?? "localhost:6379";
 
+    options.InstanceName = "StarterKit:";
+});
+
+builder.Services.AddSingleton<IRedisCacheService, RedisCacheService>();
 var app = builder.Build();
 
 if (builder.Configuration.GetValue("SeedData:Enabled", true))
@@ -85,7 +95,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseRateLimiter();
 app.UseOutputCache();
-app.MapStarterKitHealthChecks();
+app.MapStarterKitObservability();
 app.MapApiEndpoints();
 
 

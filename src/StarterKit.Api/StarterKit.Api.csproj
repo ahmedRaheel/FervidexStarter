@@ -30,7 +30,9 @@
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Http" />
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" />
     <PackageReference Include="Dapper" />
+    <PackageReference Include="Elven.Observability.Instrumentation.EntityFrameworkCore" />
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" />
     <PackageReference Include="MediatR" />
@@ -40,7 +42,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+    <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" />
     <PackageReference Include="Polly.Extensions.Http" />
     <PackageReference Include="Serilog.AspNetCore" />
     <PackageReference Include="Serilog.Enrichers.Environment" />
